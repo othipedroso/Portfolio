@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>root@dev:~/portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0c0c0c;
+            --text: #cccccc;
+            --green: #23d18b;
+            --blue: #3b8eea;
+            --yellow: #d7ba7d;
+            --error: #f44747;
+            --path: #3b8eea;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Fira Code', monospace;
+            margin: 0;
+            padding: 20px;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        #terminal {
+            max-width: 900px;
+            margin: 0 auto;
+            min-height: 80vh;
+        }
+
+        /* Linhas de saída */
+        .output-line {
+            margin-bottom: 5px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .command-line {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .prompt {
+            color: var(--green);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .path { color: var(--blue); }
+
+        /* Input invisível mas focado */
+        #cmd-input {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: 'Fira Code', monospace;
+            font-size: 16px;
+            flex: 1;
+            outline: none;
+        }
+
+        /* Destaques de cor */
+        .cmd { color: var(--yellow); font-weight: bold; }
+        .arg { color: #ce9178; }
+        .success { color: var(--green); }
+        .error { color: var(--error); }
+        
+        /* Tabela de Projetos */
+        .project-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .proj-name { color: var(--green); font-weight: bold; }
+        .proj-desc { color: #888; }
+
+    </style>
+</head>
+<body onclick="document.getElementById('cmd-input').focus()">
+
+<div id="terminal">
+    <div class="output-line">
+        Welcome to <span style="color:var(--green)">DevOS v1.0.0</span> (LTS) <br>
+        Type <span class="cmd">'help'</span> to see available commands.
+    </div>
+    
+    <div id="history"></div>
+
+    <div class="command-line">
+        <span class="prompt">guest@dev:<span class="path">~</span>$</span>
+        <input type="text" id="cmd-input" autocomplete="off" spellcheck="false" autofocus>
+    </div>
+</div>
+
+<script>
+    // --- DATABASE DOS SEUS PROJETOS ---
+    const projects = {
+        'radar': { desc: 'Fiscalização de Gastos (Câmara/Senado)', url: './index.html' }, // Ajuste os links reais depois
+        'coindash': { desc: 'Dashboard Financeiro Crypto em Tempo Real', url: './financeiro.html' },
+        'quiz': { desc: 'Quiz interativo para Devs Fullstack', url: './quiz.html' },
+        'ciclo': { desc: 'App de Saúde Feminina Privacy-First', url: './ciclo.html' },
+        'finan': { desc: 'Gestão Financeira com MVC e LocalStorage', url: './financeiro_v2.html' },
+        'task': { desc: 'Kanban Board com Drag and Drop Nativo', url: './kanban.html' },
+        'tft': { desc: 'Builder de Sinergias (Algoritmo Relacional)', url: './tft.html' },
+        'sec': { desc: 'Suite de Segurança e Auditoria de Senhas', url: './sectools.html' }
+    };
+
+    const input = document.getElementById('cmd-input');
+    const historyDiv = document.getElementById('history');
+    
+    // Histórico de comandos (Seta cima/baixo)
+    let commandHistory = [];
+    let historyIndex = -1;
+
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            const command = input.value;
+            if (command.trim()) {
+                executeCommand(command);
+                commandHistory.push(command);
+                historyIndex = commandHistory.length;
+            }
+            input.value = '';
+        } else if (e.key === 'ArrowUp') {
+            if (historyIndex > 0) {
+                historyIndex--;
+                input.value = commandHistory[historyIndex];
+            }
+            e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+            if (historyIndex < commandHistory.length - 1) {
+                historyIndex++;
+                input.value = commandHistory[historyIndex];
+            } else {
+                historyIndex = commandHistory.length;
+                input.value = '';
+            }
+        }
+    });
+
+    function print(html) {
+        const div = document.createElement('div');
+        div.className = 'output-line';
+        div.innerHTML = html;
+        historyDiv.appendChild(div);
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function executeCommand(rawCmd) {
+        // Imprime a linha do comando digitado
+        print(`<span class="prompt">guest@dev:<span class="path">~</span>$</span> ${rawCmd}`);
+
+        const args = rawCmd.trim().split(' ');
+        const cmd = args[0].toLowerCase();
+        const arg1 = args[1] ? args[1].toLowerCase() : null;
+
+        switch(cmd) {
+            case 'help':
+                print(`
+    Available commands:
+      <span class="cmd">ls</span>           List all projects
+      <span class="cmd">open</span> [name]  Open a project (e.g., 'open radar')
+      <span class="cmd">whoami</span>       About the developer
+      <span class="cmd">clear</span>        Clear terminal
+      <span class="cmd">date</span>         Current date time
+      <span class="cmd">contact</span>      Show contact info
+                `);
+                break;
+
+            case 'ls':
+                let output = 'Directory listing of ~/projects:<br><div class="project-grid">';
+                for (let key in projects) {
+                    output += `<span class="proj-name">${key}</span> <span class="proj-desc">${projects[key].desc}</span>`;
+                }
+                output += '</div>';
+                print(output);
+                break;
+
+            case 'open':
+                if (!arg1) {
+                    print('<span class="error">Error: Missing argument. Usage: open [project_name]</span>');
+                } else if (projects[arg1]) {
+                    print(`<span class="success">Opening ${arg1}...</span>`);
+                    setTimeout(() => {
+                        window.open(projects[arg1].url, '_blank');
+                    }, 500); // Delay dramático
+                } else {
+                    print(`<span class="error">Error: Project '${arg1}' not found. Type 'ls' to see list.</span>`);
+                }
+                break;
+
+            case 'whoami':
+                print(`
+    <span class="cmd">User:</span> Desenvolvedor Fullstack em Formação
+    <span class="cmd">Skills:</span> HTML5, CSS3, JS (ES6+), Python, Security, APIs
+    <span class="cmd">Goal:</span> Criar soluções que resolvem problemas reais.
+    <span class="cmd">Status:</span> 🟢 Open to work
+                `);
+                break;
+            
+            case 'contact':
+                print(`
+    📧 Email: seu.email@exemplo.com
+    🔗 LinkedIn: linkedin.com/in/seu-perfil
+    🐙 GitHub: github.com/seu-user
+                `);
+                break;
+
+            case 'clear':
+                historyDiv.innerHTML = '';
+                break;
+            
+            case 'date':
+                print(new Date().toString());
+                break;
+
+            case 'sudo':
+                print('<span class="error">Permission denied: You are not root. Nice try! ;)</span>');
+                break;
+
+            default:
+                print(`<span class="error">Command not found: ${cmd}. Type 'help'.</span>`);
+        }
+    }
+</script>
+
+</body>
+</html>
