@@ -3,232 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>root@dev:~/portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <title>Thiago Pedroso | Portfólio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg: #0c0c0c;
-            --text: #cccccc;
-            --green: #23d18b;
-            --blue: #3b8eea;
-            --yellow: #d7ba7d;
-            --error: #f44747;
-            --path: #3b8eea;
+            --bg: #0d1117;
+            --card-bg: #161b22;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --border: #30363d;
+            --python: #3572A5;
+            --html: #e34c26;
         }
 
         body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Fira Code', monospace;
+            color: var(--text-primary);
             margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--border);
+            background-color: var(--card-bg);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #ffffff;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 10px auto 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
             padding: 20px;
-            font-size: 16px;
-            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.3s;
         }
 
-        #terminal {
-            max-width: 900px;
-            margin: 0 auto;
-            min-height: 80vh;
+        .card:hover {
+            border-color: var(--text-secondary);
         }
 
-        /* Linhas de saída */
-        .output-line {
-            margin-bottom: 5px;
-            white-space: pre-wrap;
-            line-height: 1.5;
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 10px 0;
         }
 
-        .command-line {
+        .card-title a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .card-title a:hover {
+            text-decoration: underline;
+        }
+
+        .card-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+
+        .card-footer {
             display: flex;
             align-items: center;
-            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            gap: 15px;
         }
 
-        .prompt {
-            color: var(--green);
-            margin-right: 10px;
-            font-weight: bold;
+        .lang-dot {
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: middle;
         }
 
-        .path { color: var(--blue); }
+        .dot-python { background-color: var(--python); }
+        .dot-html { background-color: var(--html); }
 
-        /* Input invisível mas focado */
-        #cmd-input {
-            background: transparent;
-            border: none;
-            color: var(--text);
-            font-family: 'Fira Code', monospace;
-            font-size: 16px;
-            flex: 1;
-            outline: none;
+        .social-links {
+            margin-top: 20px;
         }
 
-        /* Destaques de cor */
-        .cmd { color: var(--yellow); font-weight: bold; }
-        .arg { color: #ce9178; }
-        .success { color: var(--green); }
-        .error { color: var(--error); }
-        
-        /* Tabela de Projetos */
-        .project-grid {
-            display: grid;
-            grid-template-columns: 150px 1fr;
-            gap: 10px;
-            margin: 10px 0;
+        .social-links a {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin: 0 10px;
+            text-decoration: none;
+            transition: color 0.3s;
         }
-        .proj-name { color: var(--green); font-weight: bold; }
-        .proj-desc { color: #888; }
 
+        .social-links a:hover {
+            color: var(--accent);
+        }
     </style>
 </head>
-<body onclick="document.getElementById('cmd-input').focus()">
+<body>
 
-<div id="terminal">
-    <div class="output-line">
-        Welcome to <span style="color:var(--green)">DevOS v1.0.0</span> (LTS) <br>
-        Type <span class="cmd">'help'</span> to see available commands.
-    </div>
-    
-    <div id="history"></div>
+    <header>
+        <h1>Thiago Pedroso</h1>
+        <p>Desenvolvedor focado em Python, integrações de APIs e soluções com Streamlit.</p>
+        <div class="social-links">
+            <a href="https://github.com/othipedroso" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/thiago-pedroso" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </header>
 
-    <div class="command-line">
-        <span class="prompt">guest@dev:<span class="path">~</span>$</span>
-        <input type="text" id="cmd-input" autocomplete="off" spellcheck="false" autofocus>
-    </div>
-</div>
-
-<script>
-    // --- DATABASE DOS SEUS PROJETOS ---
-    const projects = {
-        'radar': { desc: 'Fiscalização de Gastos (Câmara/Senado)', url: './index.html' }, // Ajuste os links reais depois
-        'coindash': { desc: 'Dashboard Financeiro Crypto em Tempo Real', url: './financeiro.html' },
-        'quiz': { desc: 'Quiz interativo para Devs Fullstack', url: './quiz.html' },
-        'ciclo': { desc: 'App de Saúde Feminina Privacy-First', url: './ciclo.html' },
-        'finan': { desc: 'Gestão Financeira com MVC e LocalStorage', url: './financeiro_v2.html' },
-        'task': { desc: 'Kanban Board com Drag and Drop Nativo', url: './kanban.html' },
-        'tft': { desc: 'Builder de Sinergias (Algoritmo Relacional)', url: './tft.html' },
-        'sec': { desc: 'Suite de Segurança e Auditoria de Senhas', url: './sectools.html' }
-    };
-
-    const input = document.getElementById('cmd-input');
-    const historyDiv = document.getElementById('history');
-    
-    // Histórico de comandos (Seta cima/baixo)
-    let commandHistory = [];
-    let historyIndex = -1;
-
-    input.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            const command = input.value;
-            if (command.trim()) {
-                executeCommand(command);
-                commandHistory.push(command);
-                historyIndex = commandHistory.length;
-            }
-            input.value = '';
-        } else if (e.key === 'ArrowUp') {
-            if (historyIndex > 0) {
-                historyIndex--;
-                input.value = commandHistory[historyIndex];
-            }
-            e.preventDefault();
-        } else if (e.key === 'ArrowDown') {
-            if (historyIndex < commandHistory.length - 1) {
-                historyIndex++;
-                input.value = commandHistory[historyIndex];
-            } else {
-                historyIndex = commandHistory.length;
-                input.value = '';
-            }
-        }
-    });
-
-    function print(html) {
-        const div = document.createElement('div');
-        div.className = 'output-line';
-        div.innerHTML = html;
-        historyDiv.appendChild(div);
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-    function executeCommand(rawCmd) {
-        // Imprime a linha do comando digitado
-        print(`<span class="prompt">guest@dev:<span class="path">~</span>$</span> ${rawCmd}`);
-
-        const args = rawCmd.trim().split(' ');
-        const cmd = args[0].toLowerCase();
-        const arg1 = args[1] ? args[1].toLowerCase() : null;
-
-        switch(cmd) {
-            case 'help':
-                print(`
-    Available commands:
-      <span class="cmd">ls</span>           List all projects
-      <span class="cmd">open</span> [name]  Open a project (e.g., 'open radar')
-      <span class="cmd">whoami</span>       About the developer
-      <span class="cmd">clear</span>        Clear terminal
-      <span class="cmd">date</span>         Current date time
-      <span class="cmd">contact</span>      Show contact info
-                `);
-                break;
-
-            case 'ls':
-                let output = 'Directory listing of ~/projects:<br><div class="project-grid">';
-                for (let key in projects) {
-                    output += `<span class="proj-name">${key}</span> <span class="proj-desc">${projects[key].desc}</span>`;
-                }
-                output += '</div>';
-                print(output);
-                break;
-
-            case 'open':
-                if (!arg1) {
-                    print('<span class="error">Error: Missing argument. Usage: open [project_name]</span>');
-                } else if (projects[arg1]) {
-                    print(`<span class="success">Opening ${arg1}...</span>`);
-                    setTimeout(() => {
-                        window.open(projects[arg1].url, '_blank');
-                    }, 500); // Delay dramático
-                } else {
-                    print(`<span class="error">Error: Project '${arg1}' not found. Type 'ls' to see list.</span>`);
-                }
-                break;
-
-            case 'whoami':
-                print(`
-    <span class="cmd">User:</span> Desenvolvedor Fullstack em Formação
-    <span class="cmd">Skills:</span> HTML5, CSS3, JS (ES6+), Python, Security, APIs
-    <span class="cmd">Goal:</span> Criar soluções que resolvem problemas reais.
-    <span class="cmd">Status:</span> 🟢 Open to work
-                `);
-                break;
+    <div class="container">
+        <h2 class="section-title">Projetos em Destaque</h2>
+        
+        <div class="grid">
             
-            case 'contact':
-                print(`
-    📧 Email: seu.email@exemplo.com
-    🔗 LinkedIn: linkedin.com/in/seu-perfil
-    🐙 GitHub: github.com/seu-user
-                `);
-                break;
+            <!-- Projeto 1 -->
+            <div class="card">
+                <h3 class="card-title">
+                    <i class="far fa-bookmark"></i> <a href="https://github.com/othipedroso/sherlock-cnpj" target="_blank">sherlockcnpj</a>
+                </h3>
+                <p class="card-desc">Ferramenta de investigação corporativa e compliance para extração e cruzamento de dados públicos utilizando a BrasilAPI.</p>
+                <div class="card-footer">
+                    <span><span class="lang-dot dot-python"></span>Python</span>
+                </div>
+            </div>
 
-            case 'clear':
-                historyDiv.innerHTML = '';
-                break;
-            
-            case 'date':
-                print(new Date().toString());
-                break;
+            <!-- Projeto 2 -->
+            <div class="card">
+                <h3 class="card-title">
+                    <i class="far fa-bookmark"></i> <a href="https://github.com/othipedroso/dev-quiz" target="_blank">dev-quiz</a>
+                </h3>
+                <p class="card-desc">Motor de avaliação interativa (Quiz) focado em gerenciamento de estado e renderização reativa via Streamlit.</p>
+                <div class="card-footer">
+                    <span><span class="lang-dot dot-python"></span>Python</span>
+                </div>
+            </div>
 
-            case 'sudo':
-                print('<span class="error">Permission denied: You are not root. Nice try! ;)</span>');
-                break;
+            <!-- Projeto 3 -->
+            <div class="card">
+                <h3 class="card-title">
+                    <i class="far fa-bookmark"></i> <a href="https://github.com/othipedroso/ciclo-zen" target="_blank">ciclo-zen</a>
+                </h3>
+                <p class="card-desc">Sistema de monitoramento de ciclo menstrual com arquitetura Privacy-First, método Ogino-Knaus e armazenamento JSON local.</p>
+                <div class="card-footer">
+                    <span><span class="lang-dot dot-python"></span>Python</span>
+                </div>
+            </div>
 
-            default:
-                print(`<span class="error">Command not found: ${cmd}. Type 'help'.</span>`);
-        }
-    }
-</script>
+            <!-- Projeto 4 -->
+            <div class="card">
+                <h3 class="card-title">
+                    <i class="far fa-bookmark"></i> <a href="https://github.com/othipedroso/coindash-24h" target="_blank">coindash-24h</a>
+                </h3>
+                <p class="card-desc">Dashboard financeiro em tempo real integrando consumo assíncrono de APIs (Binance e BCB) para criptomoedas e câmbio.</p>
+                <div class="card-footer">
+                    <span><span class="lang-dot dot-python"></span>Python</span>
+                </div>
+            </div>
+
+            <!-- Projeto 5 -->
+            <div class="card">
+                <h3 class="card-title">
+                    <i class="far fa-bookmark"></i> <a href="https://github.com/othipedroso/organizador" target="_blank">organizador</a>
+                </h3>
+                <p class="card-desc">Script em Python que organiza automaticamente arquivos em pastas categorizadas (Imagens, Docs, etc.) com base na extensão.</p>
+                <div class="card-footer">
+                    <span><span class="lang-dot dot-python"></span>Python</span>
+                </div>
+            </div>
+
+            <!-- Projeto 6 -->
+            <div class="card">
+                <h3 class="card-title">
+                    <i class="far fa-bookmark"></i> <a href="https://github.com/othipedroso/pomodoro" target="_blank">pomodoro</a>
+                </h3>
+                <p class="card-desc">Temporizador Pomodoro automático construído com lógica client-side, apresentando ciclos automáticos de foco e descanso.</p>
+                <div class="card-footer">
+                    <span><span class="lang-dot dot-html"></span>HTML/JS</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 </body>
 </html>
